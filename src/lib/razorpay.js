@@ -32,7 +32,7 @@ export const initiatePayment = ({ plan, user, onSuccess, onError }) => {
   if (!planDetails) { onError('Invalid plan'); return }
 
   const options = {
-    key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+    key: import.meta.env.VITE_RAZORPAY_KEY,
     amount: planDetails.amount,
     currency: 'INR',
     name: 'FitWithRam',
