@@ -15,7 +15,6 @@
     "react-router-dom": "^6.21.0",
     "recharts": "^2.10.0",
     "zustand": "^4.4.7",
-    "razorpay": "^2.9.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
