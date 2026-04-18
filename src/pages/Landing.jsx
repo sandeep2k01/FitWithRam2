@@ -307,6 +307,7 @@ export default function Landing() {
   const navigate = useNavigate()
   const [hoverNav, setHoverNav] = useState(null)
   const [hoverFeature, setHoverFeature] = useState(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
     <div style={{ background: '#f5f5f5', color: '#0f0f0a', fontFamily: "'DM Sans', sans-serif", overflowX: 'hidden' }}>
@@ -317,7 +318,8 @@ export default function Landing() {
           FIT<span style={{ color: '#c5c5c5' }}>WITH</span>RAM
         </Link>
 
-        <ul style={S.navLinks}>
+        {/* Desktop nav links */}
+        <ul style={{ ...S.navLinks }} className="nav-links-desktop">
           {['Features', 'Programs', 'Pricing'].map(label => (
             <li key={label}>
               <a
@@ -331,14 +333,44 @@ export default function Landing() {
         </ul>
 
         <div style={S.navRight}>
-          <BtnGhost to="/login" style={{ padding: '0.45rem 1.1rem', fontSize: '0.75rem' }}>Login</BtnGhost>
-          <BtnPrimary to="/signup" style={{ padding: '0.45rem 1.1rem', fontSize: '0.75rem' }}>Join Free</BtnPrimary>
+          <div className="nav-auth-desktop">
+            <BtnGhost to="/login" style={{ padding: '0.45rem 1.1rem', fontSize: '0.75rem' }}>Login</BtnGhost>
+            <BtnPrimary to="/signup" style={{ padding: '0.45rem 1.1rem', fontSize: '0.75rem' }}>Join Free</BtnPrimary>
+          </div>
+          {/* Hamburger */}
+          <button onClick={() => setMobileMenuOpen(o => !o)} className="hamburger-landing" style={{
+            display: 'none', background: 'none', border: 'none', cursor: 'pointer',
+            fontSize: '1.5rem', color: '#0f0f0a', padding: '0.25rem'
+          }}>☰</button>
         </div>
       </nav>
 
+      {/* Mobile menu */}
+      {mobileMenuOpen && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(245,245,245,0.98)',
+          zIndex: 200, display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center', gap: '2rem'
+        }}>
+          <button onClick={() => setMobileMenuOpen(false)} style={{
+            position: 'absolute', top: '1.5rem', right: '1.5rem',
+            background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: '#0f0f0a'
+          }}>✕</button>
+          {['Features', 'Programs', 'Pricing'].map(label => (
+            <a key={label} href={`#${label.toLowerCase()}`}
+              onClick={() => setMobileMenuOpen(false)}
+              style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '2.5rem', letterSpacing: '3px', color: '#0f0f0a', textDecoration: 'none' }}>{label}</a>
+          ))}
+          <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+            <BtnGhost to="/login" onClick={() => setMobileMenuOpen(false)}>Login</BtnGhost>
+            <BtnPrimary to="/signup" onClick={() => setMobileMenuOpen(false)}>Join Free</BtnPrimary>
+          </div>
+        </div>
+      )}
+
       {/* ── HERO ── */}
       <div style={{ borderBottom: '0.5px solid #eeeeee' }}>
-        <div style={S.hero}>
+        <div style={S.hero} className="hero-grid">
           <div style={S.heroBg}>FITWITHRAM</div>
 
           {/* LEFT */}
@@ -365,7 +397,7 @@ export default function Landing() {
               <BtnGhost to="/login">Sign In</BtnGhost>
             </div>
 
-            <div style={S.heroStats}>
+            <div style={S.heroStats} className="hero-stats">
               {[['3K+', 'Active Members'], ['200+', 'Exercises'], ['98%', 'Satisfaction']].map(([num, label]) => (
                 <div key={label}>
                   <div style={S.statNum}>{num}</div>
@@ -376,7 +408,7 @@ export default function Landing() {
           </div>
 
           {/* RIGHT — hero image */}
-          <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'center' }}>
+          <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'center' }} className="hero-image-wrap">
             <img src="/media/images/landing_hero.png" alt="Fitness Equipment" style={{ width: '100%', maxWidth: '550px', objectFit: 'contain', mixBlendMode: 'multiply', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.15))' }} />
           </div>
         </div>
@@ -389,7 +421,7 @@ export default function Landing() {
           <h2 style={S.sectionTitle}>EVERYTHING<br />YOU NEED</h2>
           <p style={S.sectionSub}>Built for serious athletes and beginners alike — one platform, managed entirely by Ram.</p>
 
-          <div style={S.featuresGrid}>
+          <div style={S.featuresGrid} className="features-grid">
             {FEATURES.map((f, i) => (
               <div
                 key={f.num}
@@ -515,15 +547,41 @@ export default function Landing() {
       </div>
 
       {/* ── FOOTER ── */}
-      <footer style={S.footer}>
+      <footer style={{ ...S.footer }} className="landing-footer">
         <div style={S.footerLogo}>FITWITHRAM</div>
-        <div style={S.footerLinks}>
+        <div style={{ ...S.footerLinks }} className="footer-links">
           {['Features', 'Pricing', 'Dashboard', 'Privacy', 'Contact'].map(l => (
             <a key={l} href="#" style={S.footerLink}>{l}</a>
           ))}
         </div>
         <div style={S.footerCopy}>© {new Date().getFullYear()} FitWithRam. All rights reserved.</div>
       </footer>
+
+      {/* ── Responsive Styles ── */}
+      <style>{`
+        @media (max-width: 768px) {
+          .hamburger-landing { display: flex !important; }
+          .nav-links-desktop { display: none !important; }
+          .nav-auth-desktop { display: none !important; }
+          .hero-grid {
+            grid-template-columns: 1fr !important;
+            gap: 2rem !important;
+            padding: 2.5rem 1.25rem !important;
+          }
+          .hero-image-wrap { order: -1; }
+          .hero-image-wrap img { max-width: 280px !important; }
+          .hero-stats { gap: 1.5rem !important; }
+          .features-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .landing-footer {
+            flex-direction: column !important;
+            text-align: center !important;
+            gap: 1rem !important;
+          }
+          .footer-links { flex-wrap: wrap !important; justify-content: center !important; }
+        }
+      `}</style>
 
     </div>
   )
