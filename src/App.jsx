@@ -21,6 +21,7 @@ import Payments from './pages/dashboard/Payments'
 
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminMembers from './pages/admin/AdminMembers'
+import AdminUserDetail from './pages/admin/AdminUserDetail'
 import AdminPrograms from './pages/admin/AdminPrograms'
 import AdminDiet from './pages/admin/AdminDiet'
 import AdminPayments from './pages/admin/AdminPayments'
@@ -77,6 +78,7 @@ export default function App() {
         <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
           <Route index element={<AdminDashboard />} />
           <Route path="members" element={<AdminMembers />} />
+          <Route path="members/:userId" element={<AdminUserDetail />} />
           <Route path="programs" element={<AdminPrograms />} />
           <Route path="diet" element={<AdminDiet />} />
           <Route path="payments" element={<AdminPayments />} />

@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 
 export default function AdminMembers() {
   const [members, setMembers] = useState([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => { fetchMembers() }, [])
 
@@ -30,33 +32,53 @@ export default function AdminMembers() {
         <div>
           <div className="tag" style={{ marginBottom: '0.5rem' }}>Admin</div>
           <h1 style={{ fontFamily: 'var(--ff-display)', fontSize: '2.5rem', letterSpacing: '2px' }}>MEMBERS</h1>
+          <div style={{ color: 'var(--muted)', fontSize: '0.8rem', marginTop: '0.3rem' }}>{filtered.length} member{filtered.length !== 1 ? 's' : ''} · Click "Manage" to control diet, workouts & progress</div>
         </div>
         <input placeholder="Search members..." value={search} onChange={e => setSearch(e.target.value)} style={{ width: 260 }} />
       </div>
 
-      <div className="card">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr 80px 120px 100px', gap: '1rem', fontSize: '0.68rem', letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--muted)', padding: '0 0 0.75rem', borderBottom: '0.5px solid var(--border)', marginBottom: '0.25rem' }}>
-          <span>Name</span><span>Email</span><span>Plan</span><span>Joined</span><span>Actions</span>
+      <div className="card" style={{ overflowX: 'auto' }}>
+        {/* Header row */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr 80px 110px 100px 90px', gap: '1rem', fontSize: '0.68rem', letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--muted)', padding: '0 0 0.75rem', borderBottom: '0.5px solid var(--border)', marginBottom: '0.25rem', minWidth: 620 }}>
+          <span>Name</span><span>Email</span><span>Plan</span><span>Joined</span><span>Quick Plan</span><span>Actions</span>
         </div>
-        {loading ? <div style={{ padding: '2rem', color: 'var(--muted)', fontSize: '0.85rem', textAlign: 'center' }}>Loading...</div> :
-          filtered.map(m => (
-            <div key={m.id} style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr 80px 120px 100px', gap: '1rem', padding: '0.75rem 0', borderBottom: '0.5px solid var(--border)', alignItems: 'center' }}>
-              <div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 500 }}>{m.full_name || '—'}</div>
-                {m.role === 'admin' && <span className="badge badge-warning" style={{ marginTop: '0.2rem' }}>admin</span>}
+
+        {loading ? (
+          <div style={{ padding: '2rem', color: 'var(--muted)', fontSize: '0.85rem', textAlign: 'center' }}>Loading...</div>
+        ) : filtered.length === 0 ? (
+          <div style={{ padding: '2rem', color: 'var(--muted)', fontSize: '0.85rem', textAlign: 'center' }}>No members found.</div>
+        ) : filtered.map(m => (
+          <div key={m.id} style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr 80px 110px 100px 90px', gap: '1rem', padding: '0.75rem 0', borderBottom: '0.5px solid var(--border)', alignItems: 'center', minWidth: 620 }}>
+            <div>
+              <div style={{ fontSize: '0.88rem', fontWeight: 600 }}>{m.full_name || '—'}</div>
+              <div style={{ display: 'flex', gap: '0.35rem', marginTop: '0.2rem', flexWrap: 'wrap' }}>
+                {m.role === 'admin' && <span className="badge badge-warning" style={{ fontSize: '0.62rem' }}>admin</span>}
+                {m.fitness_level && <span className="badge badge-neutral" style={{ fontSize: '0.62rem' }}>{m.fitness_level}</span>}
               </div>
-              <span style={{ color: 'var(--muted)', fontSize: '0.78rem' }}>{m.email}</span>
-              <span className={`badge badge-${m.is_premium ? 'success' : 'neutral'}`}>{m.plan || 'free'}</span>
-              <span style={{ color: 'var(--muted)', fontSize: '0.75rem' }}>{new Date(m.created_at).toLocaleDateString('en-IN')}</span>
-              <select value={m.plan || 'free'} onChange={e => updatePlan(m.id, e.target.value)} style={{ padding: '0.3rem 0.5rem', fontSize: '0.75rem', width: '100%' }}>
-                <option value="free">Free</option>
-                <option value="monthly">Monthly</option>
-                <option value="yearly">Yearly</option>
-                <option value="lifetime">Lifetime</option>
-              </select>
             </div>
-          ))
-        }
+            <span style={{ color: 'var(--muted)', fontSize: '0.78rem', wordBreak: 'break-all' }}>{m.email}</span>
+            <span className={`badge badge-${m.is_premium ? 'success' : 'neutral'}`}>{m.plan || 'free'}</span>
+            <span style={{ color: 'var(--muted)', fontSize: '0.75rem' }}>{new Date(m.created_at).toLocaleDateString('en-IN')}</span>
+
+            {/* Quick plan change */}
+            <select value={m.plan || 'free'} onChange={e => updatePlan(m.id, e.target.value)} style={{ padding: '0.3rem 0.4rem', fontSize: '0.72rem', width: '100%', border: '0.5px solid var(--border)', borderRadius: 6, fontFamily: 'inherit' }}>
+              <option value="free">Free</option>
+              <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
+              <option value="lifetime">Lifetime</option>
+            </select>
+
+            {/* Manage button */}
+            <button
+              onClick={() => navigate(`/admin/members/${m.id}`)}
+              style={{ padding: '0.4rem 0.75rem', background: '#111', color: '#fff', border: 'none', borderRadius: 7, fontSize: '0.72rem', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }}
+              onMouseEnter={e => e.target.style.background = '#333'}
+              onMouseLeave={e => e.target.style.background = '#111'}
+            >
+              Manage →
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   )

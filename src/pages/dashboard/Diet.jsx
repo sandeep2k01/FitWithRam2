@@ -59,10 +59,19 @@ export default function Diet() {
   useEffect(() => { if (profile) fetchDiet() }, [profile])
 
   const fetchDiet = async () => {
+    // Read admin-assigned diet_plan from profiles table
+    const { data: profileData } = await supabase
+      .from('profiles').select('diet_plan').eq('id', profile.id).single()
+    if (profileData?.diet_plan) {
+      // Merge into auth store so Diet page reads it reactively
+      const store = await import('../../store/authStore')
+      store.useAuthStore.setState(s => ({ ...s, profile: { ...s.profile, diet_plan: profileData.diet_plan } }))
+    }
+    // Fallback: legacy user_diet_plans table
     const { data: assigned } = await supabase
       .from('user_diet_plans')
       .select('*, diet_plan:diet_plans(*, diet_meals(*))')
-      .eq('user_id', profile.id).single()
+      .eq('user_id', profile.id).maybeSingle()
     if (assigned?.diet_plan) {
       setMyPlan(assigned.diet_plan)
       setMeals(assigned.diet_plan.diet_meals || [])
@@ -105,11 +114,12 @@ export default function Diet() {
     fat: todayLog.reduce((a, l) => a + (l.fat_g || 0), 0),
   }
 
+  const adminPlan = profile?.diet_plan
   const target = {
-    calories: myPlan?.daily_calories || 2000,
-    protein: myPlan?.protein_g || 150,
-    carbs: myPlan?.carbs_g || 200,
-    fat: myPlan?.fat_g || 60,
+    calories: adminPlan?.calories || myPlan?.daily_calories || 2000,
+    protein: adminPlan?.protein || myPlan?.protein_g || 150,
+    carbs: adminPlan?.carbs || myPlan?.carbs_g || 200,
+    fat: adminPlan?.fat || myPlan?.fat_g || 60,
   }
 
   const MEAL_TYPES = ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Pre-Workout', 'Post-Workout']
@@ -224,16 +234,34 @@ export default function Diet() {
 
       {/* My Plan */}
       {tab === 'plan' && (
-        <div>
-          {!myPlan ? (
-            <div style={{ background: '#fff', border: '1px solid #ebebeb', borderRadius: 12, padding: '3rem', textAlign: 'center' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>📋</div>
-              <div style={{ fontWeight: 700, color: '#111', marginBottom: '0.5rem' }}>No Plan Assigned</div>
-              <div style={{ color: '#aaa', fontSize: '0.85rem' }}>Your trainer will assign a personalized diet plan. Check back soon.</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
+          {/* Admin-assigned macro targets */}
+          {adminPlan && (
+            <div style={{ background: '#fff', border: '1px solid #ebebeb', borderRadius: 12, padding: '1.5rem' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#f0fdf4', border: '0.5px solid #86efac', borderRadius: 999, padding: '0.25rem 0.8rem', fontSize: '0.7rem', fontWeight: 700, color: '#16a34a', letterSpacing: '0.5px', marginBottom: '1rem' }}>
+                ✓ Plan assigned by Ram
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.75rem', marginBottom: adminPlan.meal_plan ? '1.25rem' : 0 }}>
+                {[['Calories', adminPlan.calories, 'kcal', '#111'], ['Protein', adminPlan.protein, 'g', '#3b82f6'], ['Carbs', adminPlan.carbs, 'g', '#f59e0b'], ['Fat', adminPlan.fat, 'g', '#ef4444']].map(([l, v, u, c]) => (
+                  <div key={l} style={{ textAlign: 'center', padding: '0.75rem', background: '#fafafa', borderRadius: 8 }}>
+                    <div style={{ fontSize: '1.1rem', fontWeight: 800, color: c }}>{v || '—'}<span style={{ fontSize: '0.65rem', color: '#bbb', fontWeight: 400 }}>{u}</span></div>
+                    <div style={{ fontSize: '0.68rem', color: '#aaa', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{l}</div>
+                  </div>
+                ))}
+              </div>
+              {adminPlan.meal_plan && (
+                <div style={{ background: '#fafafa', border: '0.5px solid #e5e5e5', borderRadius: 8, padding: '1rem' }}>
+                  <div style={{ fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '1px', color: '#aaa', marginBottom: '0.5rem', fontWeight: 700 }}>Meal Plan</div>
+                  <div style={{ fontSize: '0.85rem', color: '#444', lineHeight: 1.7, whiteSpace: 'pre-line' }}>{adminPlan.meal_plan}</div>
+                </div>
+              )}
             </div>
-          ) : (
+          )}
+
+          {/* Legacy plan from diet_plans table */}
+          {myPlan && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {/* Plan header */}
               <div style={{ background: '#fff', border: '1px solid #ebebeb', borderRadius: 12, padding: '1.5rem' }}>
                 <div style={{ fontWeight: 700, fontSize: '1rem', color: '#111', marginBottom: '0.5rem' }}>{myPlan.name}</div>
                 {myPlan.description && <div style={{ color: '#aaa', fontSize: '0.83rem', marginBottom: '1rem' }}>{myPlan.description}</div>}
@@ -256,6 +284,15 @@ export default function Diet() {
                   {meal.foods && <div style={{ fontSize: '0.82rem', color: '#777', lineHeight: 1.6 }}>{meal.foods}</div>}
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* No plan at all */}
+          {!adminPlan && !myPlan && (
+            <div style={{ background: '#fff', border: '1px solid #ebebeb', borderRadius: 12, padding: '3rem', textAlign: 'center' }}>
+              <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>📋</div>
+              <div style={{ fontWeight: 700, color: '#111', marginBottom: '0.5rem' }}>No Plan Assigned Yet</div>
+              <div style={{ color: '#aaa', fontSize: '0.85rem' }}>Your trainer will assign a personalized diet plan. Check back soon.</div>
             </div>
           )}
         </div>
