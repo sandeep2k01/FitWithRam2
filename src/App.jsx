@@ -46,10 +46,10 @@ const AdminRoute = ({ children }) => {
   return children
 }
 
-const GuestRoute = ({ children }) => {
+const GuestRoute = ({ children, fallback = '/dashboard' }) => {
   const { user, loading } = useAuthStore()
   if (loading) return <Spinner />
-  return user ? <Navigate to="/dashboard" replace /> : children
+  return user ? <Navigate to={fallback} replace /> : children
 }
 
 export default function App() {
@@ -59,7 +59,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<GuestRoute fallback="/dashboard"><Landing /></GuestRoute>} />
         <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
         <Route path="/signup" element={<GuestRoute><Signup /></GuestRoute>} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
