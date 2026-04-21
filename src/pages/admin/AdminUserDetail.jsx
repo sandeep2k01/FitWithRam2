@@ -73,7 +73,7 @@ export default function AdminUserDetail() {
     const today = new Date().toISOString().split('T')[0]
     const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
     const { data } = await supabase
-      .from('meals')
+      .from('food_logs')
       .select('*')
       .eq('user_id', userId)
       .gte('created_at', weekAgo)
@@ -83,10 +83,10 @@ export default function AdminUserDetail() {
 
   const fetchProgress = async () => {
     const { data: workoutData } = await supabase.from('workouts').select('created_at, total_volume, duration_minutes').eq('user_id', userId)
-    const { data: mealData } = await supabase.from('meals').select('calories, protein, carbs, fat').eq('user_id', userId)
+    const { data: mealData } = await supabase.from('food_logs').select('calories, protein_g, carbs_g, fat_g').eq('user_id', userId)
     const totalVol = workoutData?.reduce((a, w) => a + (w.total_volume || 0), 0) || 0
     const avgCals = mealData?.length ? Math.round(mealData.reduce((a, m) => a + (m.calories || 0), 0) / mealData.length) : 0
-    const avgProtein = mealData?.length ? Math.round(mealData.reduce((a, m) => a + (m.protein || 0), 0) / mealData.length) : 0
+    const avgProtein = mealData?.length ? Math.round(mealData.reduce((a, m) => a + (m.protein_g || 0), 0) / mealData.length) : 0
     setProgressStats({ totalWorkouts: workoutData?.length || 0, totalVolume: totalVol, totalMeals: mealData?.length || 0, avgCalories: avgCals, avgProtein })
   }
 
@@ -292,11 +292,11 @@ export default function AdminUserDetail() {
               <div key={meal.id} style={{ ...S.row, gridTemplateColumns: '1.5fr repeat(4, 1fr) 80px' }}>
                 <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>{new Date(meal.created_at).toLocaleDateString('en-IN')}</span>
                 <span>{meal.calories || 0} <span style={{ fontSize: '0.65rem', color: 'var(--muted)' }}>kcal</span></span>
-                <span>{meal.protein || 0}g <span style={{ fontSize: '0.65rem', color: 'var(--muted)' }}>prot</span></span>
-                <span>{meal.carbs || 0}g <span style={{ fontSize: '0.65rem', color: 'var(--muted)' }}>carb</span></span>
-                <span>{meal.fat || 0}g <span style={{ fontSize: '0.65rem', color: 'var(--muted)' }}>fat</span></span>
+                <span>{meal.protein_g || 0}g <span style={{ fontSize: '0.65rem', color: 'var(--muted)' }}>prot</span></span>
+                <span>{meal.carbs_g || 0}g <span style={{ fontSize: '0.65rem', color: 'var(--muted)' }}>carb</span></span>
+                <span>{meal.fat_g || 0}g <span style={{ fontSize: '0.65rem', color: 'var(--muted)' }}>fat</span></span>
                 <button style={S.btnDanger} onClick={async () => {
-                  await supabase.from('meals').delete().eq('id', meal.id)
+                  await supabase.from('food_logs').delete().eq('id', meal.id)
                   setMeals(prev => prev.filter(m => m.id !== meal.id))
                 }}>Del</button>
               </div>

@@ -1,71 +1,40 @@
 -- Run this in your Supabase SQL Editor
+-- Correct table names: food_logs (not meals), food_logs has no separate "meals" table
 
--- Add new profile fields for admin-controlled training
-ALTER TABLE profiles
+-- Step 1: Add new profile fields
+ALTER TABLE public.profiles
   ADD COLUMN IF NOT EXISTS fitness_level TEXT DEFAULT 'beginner',
-  ADD COLUMN IF NOT EXISTS goal TEXT DEFAULT 'general',
-  ADD COLUMN IF NOT EXISTS age INTEGER,
   ADD COLUMN IF NOT EXISTS weight NUMERIC,
-  ADD COLUMN IF NOT EXISTS height NUMERIC,
   ADD COLUMN IF NOT EXISTS diet_plan JSONB;
 
--- Allow admin to update any user's profile (RLS policy)
--- Run this only if RLS is enabled on profiles table
-CREATE POLICY IF NOT EXISTS "Admin can update all profiles"
-  ON profiles FOR UPDATE
-  USING (
-    EXISTS (
-      SELECT 1 FROM profiles AS p
-      WHERE p.id = auth.uid() AND p.role = 'admin'
-    )
-  );
+-- (age, height, goal already exist in the schema)
 
--- Allow admin to read all profiles (may already exist)
-CREATE POLICY IF NOT EXISTS "Admin can read all profiles"
-  ON profiles FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM profiles AS p
-      WHERE p.id = auth.uid() AND p.role = 'admin'
-    )
-  );
+-- Step 2: Drop old admin policies if they exist
+DROP POLICY IF EXISTS "Admin can update all profiles" ON public.profiles;
+DROP POLICY IF EXISTS "Admin can read all profiles" ON public.profiles;
+DROP POLICY IF EXISTS "Admin can read all workouts" ON public.workouts;
+DROP POLICY IF EXISTS "Admin can delete any workout" ON public.workouts;
+DROP POLICY IF EXISTS "Admin can read all food_logs" ON public.food_logs;
+DROP POLICY IF EXISTS "Admin can delete any food_log" ON public.food_logs;
 
--- Allow admin to read all workouts
-CREATE POLICY IF NOT EXISTS "Admin can read all workouts"
-  ON workouts FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM profiles AS p
-      WHERE p.id = auth.uid() AND p.role = 'admin'
-    )
-  );
+-- Step 3: Create admin policies using the existing is_admin() function
 
--- Allow admin to delete any workout
-CREATE POLICY IF NOT EXISTS "Admin can delete any workout"
-  ON workouts FOR DELETE
-  USING (
-    EXISTS (
-      SELECT 1 FROM profiles AS p
-      WHERE p.id = auth.uid() AND p.role = 'admin'
-    )
-  );
+CREATE POLICY "Admin can update all profiles"
+  ON public.profiles FOR UPDATE
+  USING (public.is_admin());
 
--- Allow admin to read all meals
-CREATE POLICY IF NOT EXISTS "Admin can read all meals"
-  ON meals FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM profiles AS p
-      WHERE p.id = auth.uid() AND p.role = 'admin'
-    )
-  );
+CREATE POLICY "Admin can read all profiles"
+  ON public.profiles FOR SELECT
+  USING (public.is_admin());
 
--- Allow admin to delete any meal
-CREATE POLICY IF NOT EXISTS "Admin can delete any meal"
-  ON meals FOR DELETE
-  USING (
-    EXISTS (
-      SELECT 1 FROM profiles AS p
-      WHERE p.id = auth.uid() AND p.role = 'admin'
-    )
-  );
+CREATE POLICY "Admin can delete any workout"
+  ON public.workouts FOR DELETE
+  USING (public.is_admin());
+
+CREATE POLICY "Admin can read all food_logs"
+  ON public.food_logs FOR SELECT
+  USING (public.is_admin());
+
+CREATE POLICY "Admin can delete any food_log"
+  ON public.food_logs FOR DELETE
+  USING (public.is_admin());
