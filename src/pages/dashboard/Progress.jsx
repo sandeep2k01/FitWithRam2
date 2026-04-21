@@ -69,7 +69,7 @@ export default function Progress() {
     { id: 'volume', label: 'Volume' },
     { id: 'duration', label: 'Duration' },
     { id: 'body', label: 'Body' },
-    { id: 'log', label: 'Log Measurement' },
+    { id: 'log', label: 'Add Measurement' },
   ]
 
   if (loading) return <div style={{ color: '#aaa', padding: '2rem', textAlign: 'center', fontSize: '0.85rem' }}>Loading progress...</div>
@@ -103,6 +103,36 @@ export default function Progress() {
         ))}
       </div>
 
+      {/* Empty State Guide */}
+      {totalWorkouts === 0 && measurements.length === 0 && tab !== 'log' && (
+        <div style={{ background: '#fff', border: '1px solid #ebebeb', borderRadius: 12, padding: '3rem 2rem', textAlign: 'center', marginBottom: '1.5rem' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📈</div>
+          <div style={{ fontWeight: 700, fontSize: '1.25rem', color: '#111', marginBottom: '0.5rem' }}>Your Progress Journey Starts Here</div>
+          <p style={{ color: '#888', fontSize: '0.9rem', marginBottom: '2.5rem' }}>Here's how to build your fitness data over time.</p>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', textAlign: 'left', marginBottom: '2.5rem', background: '#fafafa', padding: '2rem', borderRadius: 12 }}>
+            <div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#ccc', marginBottom: '0.2rem' }}>STEP 1</div>
+              <div style={{ fontWeight: 700, color: '#111', marginBottom: '0.4rem', fontSize: '1.05rem' }}>Record Workouts</div>
+              <div style={{ color: '#777', fontSize: '0.82rem', lineHeight: 1.5 }}>Each session adds to your history.</div>
+            </div>
+            <div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#ccc', marginBottom: '0.2rem' }}>STEP 2</div>
+              <div style={{ fontWeight: 700, color: '#111', marginBottom: '0.4rem', fontSize: '1.05rem' }}>Track Nutrition</div>
+              <div style={{ color: '#777', fontSize: '0.82rem', lineHeight: 1.5 }}>Add your daily meals to hit targets.</div>
+            </div>
+            <div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#ccc', marginBottom: '0.2rem' }}>STEP 3</div>
+              <div style={{ fontWeight: 700, color: '#111', marginBottom: '0.4rem', fontSize: '1.05rem' }}>Watch Charts Grow</div>
+              <div style={{ color: '#777', fontSize: '0.82rem', lineHeight: 1.5 }}>Volume, streaks & body stats over time.</div>
+            </div>
+          </div>
+          <div style={{ padding: '0.75rem 1.25rem', background: '#fffbeb', color: '#b45309', borderRadius: 8, fontSize: '0.85rem', fontWeight: 500, display: 'inline-block' }}>
+            ⚠️ Charts will appear after your first workout is recorded
+          </div>
+        </div>
+      )}
+
       {/* Volume Chart */}
       {tab === 'volume' && (
         <div style={{ background: '#fff', border: '1px solid #ebebeb', borderRadius: 12, padding: '1.5rem' }}>
@@ -123,7 +153,7 @@ export default function Progress() {
                 <Area type="monotone" dataKey="volume" stroke="#3b82f6" strokeWidth={2} fill="url(#vg)" dot={false} />
               </AreaChart>
             </ResponsiveContainer>
-          ) : <EmptyChart label="Log workouts to see volume data" />}
+          ) : <EmptyChart label="Record workouts to see volume data" />}
         </div>
       )}
 
@@ -141,7 +171,7 @@ export default function Progress() {
                 <Bar dataKey="duration" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
-          ) : <EmptyChart label="Log workouts to see duration data" />}
+          ) : <EmptyChart label="Record workouts to see duration data" />}
         </div>
       )}
 
@@ -160,7 +190,7 @@ export default function Progress() {
                   <Line type="monotone" dataKey="weight" stroke="#10b981" strokeWidth={2} dot={{ fill: '#10b981', r: 4 }} />
                 </LineChart>
               </ResponsiveContainer>
-            ) : <EmptyChart label="Log at least 2 measurements to see weight trend" />}
+            ) : <EmptyChart label="Add at least 2 measurements to see weight trend" />}
           </div>
 
           {/* Latest measurements */}
@@ -187,7 +217,7 @@ export default function Progress() {
       {/* Log Measurement */}
       {tab === 'log' && (
         <div style={{ background: '#fff', border: '1px solid #ebebeb', borderRadius: 12, padding: '1.5rem' }}>
-          <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#111', marginBottom: '1.25rem' }}>Log New Measurement</div>
+          <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#111', marginBottom: '1.25rem' }}>Add New Measurement</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '0.75rem', marginBottom: '1.25rem' }}>
             {[['weight', 'Weight (kg)'], ['body_fat', 'Body Fat (%)'], ['chest', 'Chest (cm)'], ['waist', 'Waist (cm)'], ['hips', 'Hips (cm)']].map(([k, l]) => (
               <div key={k}>

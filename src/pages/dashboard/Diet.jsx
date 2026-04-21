@@ -125,7 +125,7 @@ export default function Diet() {
   const MEAL_TYPES = ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Pre-Workout', 'Post-Workout']
 
   const tabs = [
-    { id: 'today', label: "Today's Log" },
+    { id: 'today', label: "Today's Meals" },
     { id: 'plan', label: 'My Plan' },
   ]
 
@@ -140,7 +140,7 @@ export default function Diet() {
           <p style={{ color: '#aaa', fontSize: '0.83rem' }}>Track your daily macros and meal plan</p>
         </div>
         <button onClick={() => setShowAdd(!showAdd)} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem', background: '#111', color: '#fff', border: 'none', borderRadius: 10, fontSize: '0.83rem', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>
-          + Log Food
+          + Add Food
         </button>
       </div>
 
@@ -178,7 +178,7 @@ export default function Diet() {
       {/* Add food form */}
       {showAdd && (
         <div style={{ background: '#fff', border: '1px solid #ebebeb', borderRadius: 12, padding: '1.5rem', marginBottom: '1.5rem' }}>
-          <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#111', marginBottom: '1rem' }}>Log Food</div>
+          <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#111', marginBottom: '1rem' }}>Add Food</div>
           <div style={{ display: 'grid', gridTemplateColumns: '2fr repeat(4, 1fr)', gap: '0.75rem', marginBottom: '1rem' }}>
             <div>
               <label style={{ fontSize: '0.68rem', color: '#aaa', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: '0.3rem', fontWeight: 600 }}>Food Name</label>
@@ -198,7 +198,7 @@ export default function Diet() {
               <button key={mt} onClick={() => setAddForm(p => ({ ...p, meal_type: mt }))} style={{ padding: '0.3rem 0.75rem', fontSize: '0.75rem', background: addForm.meal_type === mt ? '#111' : '#f0f0f0', color: addForm.meal_type === mt ? '#fff' : '#666', border: 'none', borderRadius: 999, cursor: 'pointer', fontFamily: 'inherit', fontWeight: addForm.meal_type === mt ? 600 : 400 }}>{mt}</button>
             ))}
             <button onClick={logFood} disabled={adding} style={{ marginLeft: 'auto', padding: '0.5rem 1.25rem', background: '#111', color: '#fff', border: 'none', borderRadius: 10, fontSize: '0.82rem', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>
-              {adding ? 'Logging...' : 'Add Food'}
+              {adding ? 'Adding...' : 'Add Food'}
             </button>
           </div>
         </div>
@@ -211,13 +211,36 @@ export default function Diet() {
         ))}
       </div>
 
-      {/* Today's Log */}
+      {/* Today's Meals */}
       {tab === 'today' && (
         <div style={{ background: '#fff', border: '1px solid #ebebeb', borderRadius: 12, padding: '1.5rem' }}>
           {todayLog.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '2.5rem', color: '#bbb' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>🥗</div>
-              <div style={{ fontSize: '0.88rem' }}>Nothing logged today. Click "+ Log Food" to start!</div>
+            <div style={{ padding: '3rem 2rem', textAlign: 'center' }}>
+              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🥗</div>
+              <div style={{ fontWeight: 700, fontSize: '1.25rem', color: '#111', marginBottom: '0.5rem' }}>Fuel Your Training Right</div>
+              <p style={{ color: '#888', fontSize: '0.9rem', marginBottom: '2.5rem' }}>Here's how to manage your nutrition.</p>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', textAlign: 'left', marginBottom: '2.5rem', background: '#fafafa', padding: '2rem', borderRadius: 12 }}>
+                <div>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#ccc', marginBottom: '0.2rem' }}>STEP 1</div>
+                  <div style={{ fontWeight: 700, color: '#111', marginBottom: '0.4rem', fontSize: '1.05rem' }}>Check Your Plan</div>
+                  <div style={{ color: '#777', fontSize: '0.82rem', lineHeight: 1.5 }}>Your trainer assigns your macro targets.</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#ccc', marginBottom: '0.2rem' }}>STEP 2</div>
+                  <div style={{ fontWeight: 700, color: '#111', marginBottom: '0.4rem', fontSize: '1.05rem' }}>Add Your Meals</div>
+                  <div style={{ color: '#777', fontSize: '0.82rem', lineHeight: 1.5 }}>Record breakfast, lunch, and dinner.</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#ccc', marginBottom: '0.2rem' }}>STEP 3</div>
+                  <div style={{ fontWeight: 700, color: '#111', marginBottom: '0.4rem', fontSize: '1.05rem' }}>Hit Your Targets</div>
+                  <div style={{ color: '#777', fontSize: '0.82rem', lineHeight: 1.5 }}>Track calories, protein & macros daily.</div>
+                </div>
+              </div>
+
+              <div style={{ padding: '0.75rem 1.25rem', background: '#f8fafc', color: '#475569', borderRadius: 8, fontSize: '0.85rem', fontWeight: 500, display: 'inline-block' }}>
+                📋 Your trainer (Ram) will assign a personalized diet plan
+              </div>
             </div>
           ) : (
             <>

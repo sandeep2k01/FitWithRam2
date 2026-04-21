@@ -4,7 +4,7 @@ import { signOut } from '../../lib/supabase'
 import { useAuthStore } from '../../store/authStore'
 
 const NAV = [
-  { to: '/dashboard/workouts',  label: 'Workouts',  icon: '🏋️' },
+  { to: '/dashboard/workouts',  label: 'Workout Log',  icon: '🏋️' },
   { to: '/dashboard/exercises', label: 'Exercises', icon: '💪' },
   { to: '/dashboard/progress',  label: 'Progress',  icon: '📊' },
   { to: '/dashboard/diet',      label: 'Nutrition', icon: '🥗' },

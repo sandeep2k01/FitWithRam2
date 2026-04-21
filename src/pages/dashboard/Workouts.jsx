@@ -91,13 +91,13 @@ export default function Workouts() {
   return (
     <div>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.75rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.75rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111', marginBottom: '0.2rem' }}>Workouts</h1>
-          <p style={{ color: '#aaa', fontSize: '0.83rem' }}>{workouts.length} sessions logged</p>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111', marginBottom: '0.2rem' }}>My Workout History</h1>
+          <p style={{ color: '#aaa', fontSize: '0.83rem' }}>{workouts.length} sessions completed</p>
         </div>
-        <Link to="/dashboard/workouts/log" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem', background: '#111', color: '#fff', borderRadius: 10, fontSize: '0.83rem', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s' }}>
-          + Start Workout
+        <Link to="/dashboard/workouts/log" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem', background: '#111', color: '#fff', borderRadius: 10, fontSize: '0.83rem', fontWeight: 600, textDecoration: 'none', transition: 'background 0.2s', whiteSpace: 'nowrap' }}>
+          + Record Workout
         </Link>
       </div>
 
@@ -120,12 +120,31 @@ export default function Workouts() {
 
       {/* Workout list */}
       {workouts.length === 0 ? (
-        <div style={{ background: '#fff', border: '1px solid #ebebeb', borderRadius: 12, padding: '4rem 2rem', textAlign: 'center' }}>
+        <div style={{ background: '#fff', border: '1px solid #ebebeb', borderRadius: 12, padding: '3rem 2rem', textAlign: 'center' }}>
           <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🏋️</div>
-          <div style={{ fontWeight: 700, fontSize: '1.1rem', color: '#111', marginBottom: '0.5rem' }}>No workouts yet</div>
-          <p style={{ color: '#aaa', fontSize: '0.85rem', marginBottom: '1.5rem' }}>Start logging your sessions to see your history here.</p>
-          <Link to="/dashboard/workouts/log" style={{ display: 'inline-flex', padding: '0.65rem 1.5rem', background: '#111', color: '#fff', borderRadius: 10, fontSize: '0.83rem', fontWeight: 600, textDecoration: 'none' }}>
-            Log First Workout
+          <div style={{ fontWeight: 700, fontSize: '1.25rem', color: '#111', marginBottom: '0.5rem' }}>Welcome to Workouts!</div>
+          <p style={{ color: '#888', fontSize: '0.9rem', marginBottom: '2.5rem' }}>Here's how to start tracking your fitness journey.</p>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', textAlign: 'left', marginBottom: '3rem', background: '#fafafa', padding: '2rem', borderRadius: 12 }}>
+            <div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#ccc', marginBottom: '0.2rem' }}>STEP 1</div>
+              <div style={{ fontWeight: 700, color: '#111', marginBottom: '0.4rem', fontSize: '1.05rem' }}>Browse Exercises</div>
+              <div style={{ color: '#777', fontSize: '0.82rem', lineHeight: 1.5 }}>Explore our database of over 200+ exercises with instructions.</div>
+            </div>
+            <div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#ccc', marginBottom: '0.2rem' }}>STEP 2</div>
+              <div style={{ fontWeight: 700, color: '#111', marginBottom: '0.4rem', fontSize: '1.05rem' }}>Record a Session</div>
+              <div style={{ color: '#777', fontSize: '0.82rem', lineHeight: 1.5 }}>Track your sets, reps, and weights live while you train.</div>
+            </div>
+            <div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#ccc', marginBottom: '0.2rem' }}>STEP 3</div>
+              <div style={{ fontWeight: 700, color: '#111', marginBottom: '0.4rem', fontSize: '1.05rem' }}>See Your Gains</div>
+              <div style={{ color: '#777', fontSize: '0.82rem', lineHeight: 1.5 }}>Watch your strength grow through volume and duration stats.</div>
+            </div>
+          </div>
+
+          <Link to="/dashboard/workouts/log" style={{ display: 'inline-flex', padding: '0.85rem 2rem', background: '#111', color: '#fff', borderRadius: 10, fontSize: '0.9rem', fontWeight: 600, textDecoration: 'none' }}>
+            Start My First Session →
           </Link>
         </div>
       ) : (
