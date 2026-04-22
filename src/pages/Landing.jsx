@@ -409,7 +409,27 @@ export default function Landing() {
 
           {/* RIGHT — hero image */}
           <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'center' }} className="hero-image-wrap">
-            <img src="/media/images/landing_hero.png" alt="Fitness Equipment" style={{ width: '100%', maxWidth: '550px', objectFit: 'contain', mixBlendMode: 'multiply', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.15))' }} />
+            <div style={{ position: 'relative', width: '100%', maxWidth: '460px' }}>
+              <img
+                src="/media/images/landing_hero.png"
+                alt="Ram — Personal Trainer"
+                style={{
+                  width: '100%',
+                  height: '580px',
+                  objectFit: 'cover',
+                  objectPosition: 'top center',
+                  display: 'block',
+                  filter: 'contrast(1.1) brightness(0.95)',
+                  borderRadius: '4px',
+                }}
+              />
+              {/* Bottom fade to blend with background */}
+              <div style={{
+                position: 'absolute', bottom: 0, left: 0, right: 0, height: '120px',
+                background: 'linear-gradient(to bottom, transparent, #f5f5f5)',
+                borderRadius: '0 0 4px 4px',
+              }} />
+            </div>
           </div>
         </div>
       </div>
