@@ -423,13 +423,6 @@ export default function Landing() {
                   filter: 'contrast(1.05) brightness(0.97)',
                 }}
               />
-              {/* Bottom fade to blend with page background */}
-              <div style={{
-                position: 'absolute', bottom: 0, left: 0, right: 0, height: '160px',
-                background: 'linear-gradient(to bottom, transparent, #f5f5f5)',
-                borderRadius: '0 0 6px 6px',
-                pointerEvents: 'none',
-              }} />
             </div>
           </div>
         </div>
