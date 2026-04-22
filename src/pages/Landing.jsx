@@ -409,25 +409,26 @@ export default function Landing() {
 
           {/* RIGHT — hero image */}
           <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'center' }} className="hero-image-wrap">
-            <div style={{ position: 'relative', width: '100%', maxWidth: '460px' }}>
+            <div style={{ position: 'relative', width: '100%', maxWidth: '480px' }}>
               <img
-                src="/media/images/landing_hero.png"
+                src="/media/herosection.jpeg"
                 alt="Ram — Personal Trainer"
                 style={{
                   width: '100%',
-                  height: '580px',
+                  height: '600px',
                   objectFit: 'cover',
-                  objectPosition: 'top center',
+                  objectPosition: 'center 15%',
                   display: 'block',
-                  filter: 'contrast(1.1) brightness(0.95)',
-                  borderRadius: '4px',
+                  borderRadius: '6px',
+                  filter: 'contrast(1.05) brightness(0.97)',
                 }}
               />
-              {/* Bottom fade to blend with background */}
+              {/* Bottom fade to blend with page background */}
               <div style={{
-                position: 'absolute', bottom: 0, left: 0, right: 0, height: '120px',
+                position: 'absolute', bottom: 0, left: 0, right: 0, height: '160px',
                 background: 'linear-gradient(to bottom, transparent, #f5f5f5)',
-                borderRadius: '0 0 4px 4px',
+                borderRadius: '0 0 6px 6px',
+                pointerEvents: 'none',
               }} />
             </div>
           </div>
@@ -589,7 +590,8 @@ export default function Landing() {
             padding: 2.5rem 1.25rem !important;
           }
           .hero-image-wrap { order: -1; }
-          .hero-image-wrap img { max-width: 280px !important; }
+          .hero-image-wrap > div { max-width: 340px !important; }
+          .hero-image-wrap img { height: 380px !important; }
           .hero-stats { gap: 1.5rem !important; }
           .features-grid {
             grid-template-columns: 1fr !important;
