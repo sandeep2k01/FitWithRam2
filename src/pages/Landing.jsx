@@ -417,7 +417,7 @@ export default function Landing() {
                   width: '100%',
                   height: '600px',
                   objectFit: 'cover',
-                  objectPosition: 'center 15%',
+                  objectPosition: 'center center',
                   display: 'block',
                   borderRadius: '6px',
                   filter: 'contrast(1.05) brightness(0.97)',
