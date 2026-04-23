@@ -8,8 +8,9 @@ const S = {
     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
     padding: '0 2.5rem', height: 64,
     borderBottom: '0.5px solid #e1e1e1',
-    background: 'rgba(245,245,245,0.96)',
+    background: 'rgba(245,245,245,0.85)',
     backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
     position: 'sticky', top: 0, zIndex: 100,
   },
   logo: {
@@ -310,7 +311,7 @@ export default function Landing() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <div style={{ background: '#f5f5f5', color: '#0f0f0a', fontFamily: "'DM Sans', sans-serif", overflowX: 'hidden' }}>
+    <div style={{ background: '#f5f5f5', color: '#0f0f0a', fontFamily: "'DM Sans', sans-serif", overflowX: 'clip' }}>
 
       {/* ── NAV ── */}
       <nav style={S.nav}>
