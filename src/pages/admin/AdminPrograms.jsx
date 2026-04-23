@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
-import { GOALS } from '../../lib/constants'
 
 export default function AdminPrograms() {
   const [programs, setPrograms] = useState([])
-  const [form, setForm] = useState({ name: '', description: '', level: 'beginner', duration_weeks: '', fitness_goal: '', training_type: 'both', days_per_week: 4 })
+  const [form, setForm] = useState({ name: '', description: '', level: 'beginner', duration_weeks: '', goal: '' })
   const [showForm, setShowForm] = useState(false)
   const [saving, setSaving] = useState(false)
 
@@ -17,9 +16,9 @@ export default function AdminPrograms() {
   const saveProgram = async (e) => {
     e.preventDefault(); setSaving(true)
     try {
-      const { data } = await supabase.from('programs').insert({ ...form, duration_weeks: parseInt(form.duration_weeks), days_per_week: parseInt(form.days_per_week), created_at: new Date().toISOString() }).select().single()
+      const { data } = await supabase.from('programs').insert({ ...form, duration_weeks: parseInt(form.duration_weeks), created_at: new Date().toISOString() }).select().single()
       setPrograms(prev => [data, ...prev])
-      setForm({ name: '', description: '', level: 'beginner', duration_weeks: '', fitness_goal: '', training_type: 'both', days_per_week: 4 })
+      setForm({ name: '', description: '', level: 'beginner', duration_weeks: '', goal: '' })
       setShowForm(false)
     } finally { setSaving(false) }
   }
@@ -45,9 +44,7 @@ export default function AdminPrograms() {
               <div><label style={{ fontSize: '0.68rem', letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginBottom: '0.35rem' }}>Program Name</label><input required value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} placeholder="e.g. Beginner Strength" /></div>
               <div><label style={{ fontSize: '0.68rem', letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginBottom: '0.35rem' }}>Duration (weeks)</label><input type="number" required value={form.duration_weeks} onChange={e => setForm(p => ({ ...p, duration_weeks: e.target.value }))} placeholder="12" /></div>
               <div><label style={{ fontSize: '0.68rem', letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginBottom: '0.35rem' }}>Level</label><select value={form.level} onChange={e => setForm(p => ({ ...p, level: e.target.value }))}><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select></div>
-              <div><label style={{ fontSize: '0.68rem', letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginBottom: '0.35rem' }}>Fitness Goal</label><select value={form.fitness_goal} onChange={e => setForm(p => ({ ...p, fitness_goal: e.target.value }))}><option value="">— Select Goal —</option>{GOALS.map(g => <option key={g} value={g}>{g}</option>)}</select></div>
-              <div><label style={{ fontSize: '0.68rem', letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginBottom: '0.35rem' }}>Training Type</label><select value={form.training_type} onChange={e => setForm(p => ({ ...p, training_type: e.target.value }))}><option value="both">Both</option><option value="offline">Offline</option><option value="online">Online</option></select></div>
-              <div><label style={{ fontSize: '0.68rem', letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginBottom: '0.35rem' }}>Days Per Week</label><select value={form.days_per_week} onChange={e => setForm(p => ({ ...p, days_per_week: e.target.value }))}><option value={3}>3 days</option><option value={4}>4 days</option><option value={5}>5 days</option><option value={6}>6 days</option></select></div>
+              <div><label style={{ fontSize: '0.68rem', letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginBottom: '0.35rem' }}>Goal</label><input value={form.goal} onChange={e => setForm(p => ({ ...p, goal: e.target.value }))} placeholder="Build Muscle, Fat Loss..." /></div>
             </div>
             <div><label style={{ fontSize: '0.68rem', letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginBottom: '0.35rem' }}>Description</label><textarea rows={3} value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} placeholder="Describe the program..." /></div>
             <div style={{ display: 'flex', gap: '0.75rem' }}>

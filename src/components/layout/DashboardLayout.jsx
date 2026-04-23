@@ -3,23 +3,13 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { signOut } from '../../lib/supabase'
 import { useAuthStore } from '../../store/authStore'
 
-const NAV_MAIN = [
-  { to: '/dashboard',                  label: 'Dashboard',        icon: '⬛', end: true },
-  { to: '/dashboard/my-plan',          label: 'My Plan',          icon: '📋' },
-  { to: '/dashboard/workouts',         label: 'Workout Log',      icon: '🏋️' },
-  { to: '/dashboard/exercises',        label: 'Exercises',        icon: '💪' },
-  { to: '/dashboard/progress',         label: 'Progress',         icon: '📊' },
-  { to: '/dashboard/diet',             label: 'Nutrition',        icon: '🥗' },
-]
-
-const NAV_TRAINING = [
-  { to: '/dashboard/offline-training', label: 'Offline Training', icon: '🏟️' },
-  { to: '/dashboard/online-training',  label: 'Online Training',  icon: '🌐' },
-]
-
-const NAV_BOTTOM = [
-  { to: '/dashboard/payments',         label: 'Upgrade',          icon: '⚡' },
-  { to: '/dashboard/profile',          label: 'Profile',          icon: '👤' },
+const NAV = [
+  { to: '/dashboard/workouts',  label: 'Workout Log',  icon: '🏋️' },
+  { to: '/dashboard/exercises', label: 'Exercises', icon: '💪' },
+  { to: '/dashboard/progress',  label: 'Progress',  icon: '📊' },
+  { to: '/dashboard/diet',      label: 'Nutrition', icon: '🥗' },
+  { to: '/dashboard/payments',  label: 'Upgrade',   icon: '⚡' },
+  { to: '/dashboard/profile',   label: 'Profile',   icon: '👤' },
 ]
 
 export default function DashboardLayout() {
@@ -65,41 +55,9 @@ export default function DashboardLayout() {
           }}>✕</button>
         </div>
 
-        {/* Main Nav */}
-        <nav style={{ flex: 1, padding: '0.75rem 0.75rem', display: 'flex', flexDirection: 'column', gap: '2px', overflowY: 'auto' }}>
-          {NAV_MAIN.map(({ to, label, icon, end }) => (
-            <NavLink key={to} to={to} end={end} onClick={() => setSidebarOpen(false)} style={({ isActive }) => ({
-              display: 'flex', alignItems: 'center', gap: '0.75rem',
-              padding: '0.6rem 0.85rem', fontSize: '0.83rem', fontWeight: isActive ? 600 : 400,
-              color: isActive ? '#111' : '#888',
-              background: isActive ? '#f0f0f0' : 'transparent',
-              borderRadius: 8,
-              textDecoration: 'none', transition: 'all 0.15s',
-            })}>
-              <span style={{ fontSize: '1rem', width: 20, textAlign: 'center' }}>{icon}</span>
-              {label}
-            </NavLink>
-          ))}
-
-          {/* Training section */}
-          <div style={{ fontSize: '0.6rem', fontWeight: 800, color: '#ccc', letterSpacing: '1.5px', textTransform: 'uppercase', padding: '1rem 0.85rem 0.35rem', marginTop: '0.5rem' }}>TRAINING</div>
-          {NAV_TRAINING.map(({ to, label, icon }) => (
-            <NavLink key={to} to={to} onClick={() => setSidebarOpen(false)} style={({ isActive }) => ({
-              display: 'flex', alignItems: 'center', gap: '0.75rem',
-              padding: '0.6rem 0.85rem', fontSize: '0.83rem', fontWeight: isActive ? 600 : 400,
-              color: isActive ? '#111' : '#888',
-              background: isActive ? '#f0f0f0' : 'transparent',
-              borderRadius: 8,
-              textDecoration: 'none', transition: 'all 0.15s',
-            })}>
-              <span style={{ fontSize: '1rem', width: 20, textAlign: 'center' }}>{icon}</span>
-              {label}
-            </NavLink>
-          ))}
-
-          {/* Bottom nav items */}
-          <div style={{ fontSize: '0.6rem', fontWeight: 800, color: '#ccc', letterSpacing: '1.5px', textTransform: 'uppercase', padding: '1rem 0.85rem 0.35rem', marginTop: '0.5rem' }}>ACCOUNT</div>
-          {NAV_BOTTOM.map(({ to, label, icon }) => (
+        {/* Nav */}
+        <nav style={{ flex: 1, padding: '0.75rem 0.75rem', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+          {NAV.map(({ to, label, icon }) => (
             <NavLink key={to} to={to} onClick={() => setSidebarOpen(false)} style={({ isActive }) => ({
               display: 'flex', alignItems: 'center', gap: '0.75rem',
               padding: '0.6rem 0.85rem', fontSize: '0.83rem', fontWeight: isActive ? 600 : 400,
