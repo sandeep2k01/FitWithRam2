@@ -440,7 +440,7 @@ export default function Landing() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }} className="training-cards-grid">
             {/* Offline Card */}
-            <div style={{ background: '#f7f7f5', border: '1px solid #e5e5e5', borderRadius: 10, padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div style={{ background: '#f7f7f5', border: '1px solid #e5e5e5', borderRadius: 10, padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem', height: '100%', boxSizing: 'border-box' }}>
               <div>
                 <div style={{ fontSize: '0.68rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#999', marginBottom: '0.6rem' }}>🏋️ At the Gym · Free</div>
                 <h3 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '2rem', letterSpacing: '2px', color: '#0f0f0a', margin: 0, marginBottom: '0.35rem' }}>OFFLINE TRAINING</h3>
@@ -456,32 +456,29 @@ export default function Landing() {
                   </li>
                 ))}
               </ul>
-              <a href="/signup?intent=offline" style={{ display: 'block', textAlign: 'center', padding: '0.8rem 1.5rem', background: '#0f0f0a', color: '#fff', borderRadius: 8, fontSize: '0.88rem', fontWeight: 600, textDecoration: 'none', letterSpacing: '0.5px' }}>
+              <a href="/signup?intent=offline" style={{ display: 'block', textAlign: 'center', padding: '0.8rem 1.5rem', background: '#0f0f0a', color: '#fff', borderRadius: 8, fontSize: '0.88rem', fontWeight: 600, textDecoration: 'none', letterSpacing: '0.5px', marginTop: 'auto' }}>
                 Get Started Free →
               </a>
             </div>
 
             {/* Online Card */}
-            <div style={{ background: '#0f0f0a', border: '1px solid #222', borderRadius: 10, padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem', position: 'relative' }}>
-              <div style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', background: '#fff', color: '#0f0f0a', fontSize: '0.6rem', fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase', padding: '0.25rem 1rem', borderRadius: 999, whiteSpace: 'nowrap', border: '1px solid #e0e0e0' }}>
-                ⭐ Most Popular
-              </div>
+            <div style={{ background: '#f7f7f5', border: '1px solid #e5e5e5', borderRadius: 10, padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem', height: '100%', boxSizing: 'border-box' }}>
               <div>
-                <div style={{ fontSize: '0.68rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#888', marginBottom: '0.6rem' }}>🌐 Train Anywhere · Premium</div>
-                <h3 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '2rem', letterSpacing: '2px', color: '#f5f5f5', margin: 0, marginBottom: '0.35rem' }}>ONLINE TRAINING</h3>
-                <div style={{ fontSize: '0.82rem', color: '#888', fontWeight: 500 }}>Full access from ₹999/month.</div>
+                <div style={{ fontSize: '0.68rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#999', marginBottom: '0.6rem' }}>🌐 Train Anywhere · Premium</div>
+                <h3 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '2rem', letterSpacing: '2px', color: '#0f0f0a', margin: 0, marginBottom: '0.35rem' }}>ONLINE TRAINING</h3>
+                <div style={{ fontSize: '0.82rem', color: '#777', fontWeight: 500 }}>Full access from ₹999/month.</div>
               </div>
               <p style={{ color: '#888', fontSize: '0.88rem', lineHeight: 1.7, margin: 0 }}>
                 Train anywhere with Ram's live guidance. Real-time form checks, live sessions, priority support and the full platform experience.
               </p>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 {['Everything in Offline', 'Live sessions with Ram', 'Chat with Ram directly', 'Form check & real-time feedback', 'Advanced analytics', 'Priority support'].map(f => (
-                  <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.85rem', color: '#ccc' }}>
-                    <span style={{ color: '#f5f5f5', fontWeight: 700, fontSize: '0.9rem' }}>✓</span>{f}
+                  <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.85rem', color: '#555' }}>
+                    <span style={{ color: '#111', fontWeight: 700, fontSize: '0.9rem' }}>✓</span>{f}
                   </li>
                 ))}
               </ul>
-              <a href="/signup?intent=online" style={{ display: 'block', textAlign: 'center', padding: '0.8rem 1.5rem', background: '#fff', color: '#0f0f0a', borderRadius: 8, fontSize: '0.88rem', fontWeight: 700, textDecoration: 'none', letterSpacing: '0.5px' }}>
+              <a href="/signup?intent=online" style={{ display: 'block', textAlign: 'center', padding: '0.8rem 1.5rem', background: '#0f0f0a', color: '#fff', borderRadius: 8, fontSize: '0.88rem', fontWeight: 600, textDecoration: 'none', letterSpacing: '0.5px', marginTop: 'auto' }}>
                 Start Premium →
               </a>
             </div>
