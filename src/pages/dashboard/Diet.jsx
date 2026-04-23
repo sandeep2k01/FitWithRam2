@@ -144,15 +144,7 @@ export default function Diet() {
         </button>
       </div>
 
-      {!profile?.is_premium && (
-        <div style={{ background: '#fff9f0', border: '1px solid #fde68a', borderRadius: 12, padding: '1rem 1.25rem', marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <div style={{ fontWeight: 600, fontSize: '0.88rem', color: '#92400e', marginBottom: '0.2rem' }}>Premium Feature</div>
-            <div style={{ fontSize: '0.78rem', color: '#b45309' }}>Unlock personalized diet plans with Premium</div>
-          </div>
-          <Link to="/dashboard/payments" style={{ padding: '0.45rem 1rem', background: '#f59e0b', color: '#fff', borderRadius: 8, fontSize: '0.78rem', fontWeight: 600, textDecoration: 'none' }}>Upgrade</Link>
-        </div>
-      )}
+
 
       {/* Macro Rings Summary */}
       <div style={{ background: '#fff', border: '1px solid #ebebeb', borderRadius: 12, padding: '1.5rem', marginBottom: '1.5rem' }}>

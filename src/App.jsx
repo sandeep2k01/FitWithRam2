@@ -17,7 +17,6 @@ import Exercises from './pages/dashboard/Exercises'
 import Progress from './pages/dashboard/Progress'
 import Diet from './pages/dashboard/Diet'
 import Profile from './pages/dashboard/Profile'
-import Payments from './pages/dashboard/Payments'
 import MyPlan from './pages/dashboard/MyPlan'
 import OfflineTraining from './pages/dashboard/OfflineTraining'
 import OnlineTraining from './pages/dashboard/OnlineTraining'
@@ -76,7 +75,6 @@ export default function App() {
           <Route path="exercises" element={<Exercises />} />
           <Route path="progress" element={<Progress />} />
           <Route path="diet" element={<Diet />} />
-          <Route path="payments" element={<Payments />} />
           <Route path="profile" element={<Profile />} />
           <Route path="offline-training" element={<OfflineTraining />} />
           <Route path="online-training" element={<OnlineTraining />} />

@@ -1,15 +1,15 @@
 // ─── Shared constants — FitWithRam platform ───
 // ⚠️  Set RAM_WHATSAPP to Ram's actual number before going live!
 // Format: country code + number, no + or spaces  e.g. 919876543210
-export const RAM_WHATSAPP = '919000000000'
+export const RAM_WHATSAPP = '+91 7036592919'
 
 export const INQUIRY_STATUSES = ['pending', 'contacted', 'active', 'closed']
 
 export const STATUS_COLORS = {
-  pending:   { bg: '#fef3c7', color: '#b45309' },
+  pending: { bg: '#fef3c7', color: '#b45309' },
   contacted: { bg: '#dbeafe', color: '#1d4ed8' },
-  active:    { bg: '#dcfce7', color: '#15803d' },
-  closed:    { bg: '#f3f4f6', color: '#6b7280' },
+  active: { bg: '#dcfce7', color: '#15803d' },
+  closed: { bg: '#f3f4f6', color: '#6b7280' },
 }
 
 export const TRAINING_TIMES = [

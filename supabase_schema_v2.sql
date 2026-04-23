@@ -39,15 +39,18 @@ CREATE TABLE IF NOT EXISTS public.inquiries (
 ALTER TABLE public.inquiries ENABLE ROW LEVEL SECURITY;
 
 -- 5. Members can view/insert their own inquiries
+DROP POLICY IF EXISTS "Members can view own inquiries" ON public.inquiries;
 CREATE POLICY "Members can view own inquiries"
   ON public.inquiries FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Members can insert own inquiries" ON public.inquiries;
 CREATE POLICY "Members can insert own inquiries"
   ON public.inquiries FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
 -- 6. Admin full access to inquiries
+DROP POLICY IF EXISTS "Admin full access to inquiries" ON public.inquiries;
 CREATE POLICY "Admin full access to inquiries"
   ON public.inquiries FOR ALL
   USING (public.is_admin())

@@ -114,10 +114,10 @@ export default function Dashboard() {
       {!profile?.is_premium && (
         <div style={{ background: 'var(--gray-2)', border: '0.5px solid var(--border-light)', padding: '1rem 1.5rem', marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderRadius: 'var(--radius-sm)' }}>
           <div>
-            <div style={{ fontSize: '0.8rem', fontWeight: 500, marginBottom: '0.2rem' }}>Upgrade to Premium</div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>Unlock diet plans, advanced analytics & more</div>
+            <div style={{ fontSize: '0.8rem', fontWeight: 500, marginBottom: '0.2rem' }}>Offline Training</div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>Upgrade to unlock live sessions and analytics</div>
           </div>
-          <Link to="/dashboard/payments" className="btn btn-primary btn-sm">Upgrade ↗</Link>
+          <Link to="/dashboard/online-training" className="btn btn-primary btn-sm">Upgrade ↗</Link>
         </div>
       )}
 

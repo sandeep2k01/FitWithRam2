@@ -3,15 +3,21 @@ import { useAuthStore } from '../../store/authStore'
 import { initiatePayment, PLANS } from '../../lib/razorpay'
 import { GOALS } from '../../lib/goals'
 
-const ONLINE_FEATURES = [
-  { label: 'Custom Workout Plan',  offline: true,  online: true },
-  { label: 'Diet Plan',            offline: true,  online: true },
-  { label: 'Progress Tracking',    offline: true,  online: true },
-  { label: 'Live Sessions',        offline: false, online: true },
-  { label: 'Chat with Ram',        offline: false, online: true },
-  { label: 'Form Check',           offline: false, online: true },
-  { label: 'Advanced Analytics',   offline: false, online: true },
-  { label: 'Priority Support',     offline: false, online: true },
+const FREE_FEATURES = [
+  'Workout tracking',
+  'Exercise library',
+  'Basic progress charts',
+  'Diet plan (assigned by Ram)',
+  'Contact Ram via form'
+]
+
+const PREMIUM_FEATURES = [
+  'Everything in free',
+  'Live sessions with Ram',
+  'Priority WhatsApp support',
+  'Form check and video feedback',
+  'Advanced analytics and insights',
+  'Monthly performance reports'
 ]
 
 const ONLINE_PLANS = [
@@ -54,25 +60,23 @@ export default function OnlineTraining() {
       </div>
 
       {/* Comparison table */}
-      <div style={{ background: '#fff', border: '1px solid #ebebeb', borderRadius: 12, padding: '1.5rem', marginBottom: '1.5rem' }}>
-        <div style={{ fontWeight: 700, fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '1px', color: '#111', marginBottom: '1rem' }}>Online vs Offline</div>
-        {/* Header */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 90px 90px', gap: '0.5rem', padding: '0.5rem 0.75rem', marginBottom: '0.25rem' }}>
-          <div style={{ fontSize: '0.68rem', color: '#aaa', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Feature</div>
-          <div style={{ textAlign: 'center', fontSize: '0.68rem', color: '#999', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Offline</div>
-          <div style={{ textAlign: 'center', fontSize: '0.68rem', color: '#111', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Online ✦</div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
+        <div style={{ background: '#fff', border: '1px solid #ebebeb', borderRadius: 12, padding: '1.5rem' }}>
+          <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: '#aaa', marginBottom: '1rem' }}>Free (Offline) Includes</div>
+          {FREE_FEATURES.map(f => (
+            <div key={f} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 0', fontSize: '0.85rem', color: '#777', borderBottom: '1px solid #f5f5f5' }}>
+              <span style={{ color: '#bbb' }}>—</span>{f}
+            </div>
+          ))}
         </div>
-        {ONLINE_FEATURES.map((feat, i) => (
-          <div key={feat.label} style={{
-            display: 'grid', gridTemplateColumns: '1fr 90px 90px', gap: '0.5rem',
-            padding: '0.65rem 0.75rem', borderRadius: 6,
-            background: i % 2 === 0 ? '#fafafa' : '#fff', alignItems: 'center',
-          }}>
-            <div style={{ fontSize: '0.88rem', color: '#333' }}>{feat.label}</div>
-            <div style={{ textAlign: 'center', color: feat.offline ? '#16a34a' : '#d1d5db', fontWeight: 600 }}>{feat.offline ? '✓' : '✗'}</div>
-            <div style={{ textAlign: 'center', color: feat.online ? '#16a34a' : '#d1d5db', fontWeight: 700 }}>{feat.online ? '✓' : '✗'}</div>
-          </div>
-        ))}
+        <div style={{ background: '#fff', border: '1px solid #ebebeb', borderRadius: 12, padding: '1.5rem' }}>
+          <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: '#aaa', marginBottom: '1rem' }}>Premium (Online) Adds</div>
+          {PREMIUM_FEATURES.map(f => (
+            <div key={f} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 0', fontSize: '0.85rem', color: '#111', fontWeight: 500, borderBottom: '1px solid #f5f5f5' }}>
+              <span style={{ color: '#10b981', fontSize: '1rem' }}>✓</span>{f}
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Pricing or active plan */}

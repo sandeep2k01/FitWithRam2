@@ -18,7 +18,6 @@ const NAV_TRAINING = [
 ]
 
 const NAV_ACCOUNT = [
-  { to: '/dashboard/payments',         label: 'Upgrade',          icon: '⚡' },
   { to: '/dashboard/profile',          label: 'Profile',          icon: '👤' },
 ]
 
