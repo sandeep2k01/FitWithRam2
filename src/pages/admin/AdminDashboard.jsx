@@ -35,16 +35,18 @@ export default function AdminDashboard() {
         <S label="Revenue" value={`₹${stats.revenue.toLocaleString()}`} color="var(--success)" />
         <S label="Workouts Today" value={stats.workoutsToday} color="var(--info)" />
       </div>
-      <div className="card">
+      <div className="card" style={{ overflowX: 'auto' }}>
         <div style={{ fontFamily: 'var(--ff-display)', fontSize: '1.1rem', letterSpacing: '1px', marginBottom: '1.25rem' }}>RECENT MEMBERS</div>
-        {recentMembers.map(m => (
-          <div key={m.id} style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr 80px 90px', gap: '1rem', padding: '0.6rem 0', borderBottom: '0.5px solid var(--border)', alignItems: 'center', fontSize: '0.82rem' }}>
-            <span style={{ fontWeight: 500 }}>{m.full_name || '—'}</span>
-            <span style={{ color: 'var(--muted)', fontSize: '0.75rem' }}>{m.email}</span>
-            <span className={`badge badge-${m.is_premium ? 'success' : 'neutral'}`}>{m.plan || 'free'}</span>
-            <span style={{ color: 'var(--muted)', fontSize: '0.72rem' }}>{new Date(m.created_at).toLocaleDateString('en-IN')}</span>
-          </div>
-        ))}
+        <div style={{ minWidth: 500 }}>
+          {recentMembers.map(m => (
+            <div key={m.id} style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr 80px 90px', gap: '1rem', padding: '0.6rem 0', borderBottom: '0.5px solid var(--border)', alignItems: 'center', fontSize: '0.82rem' }}>
+              <span style={{ fontWeight: 500 }}>{m.full_name || '—'}</span>
+              <span style={{ color: 'var(--muted)', fontSize: '0.75rem' }}>{m.email}</span>
+              <span className={`badge badge-${m.is_premium ? 'success' : 'neutral'}`}>{m.plan || 'free'}</span>
+              <span style={{ color: 'var(--muted)', fontSize: '0.72rem' }}>{new Date(m.created_at).toLocaleDateString('en-IN')}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

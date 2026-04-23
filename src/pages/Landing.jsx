@@ -521,7 +521,7 @@ export default function Landing() {
           <div style={S.sectionTag}><span style={S.sectionTagLine} />How It Works</div>
           <h2 style={S.sectionTitle}>GET STARTED<br />IN 3 STEPS</h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1px', background: '#e5e5e5', border: '0.5px solid #e5e5e5', marginTop: '3.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1px', background: '#e5e5e5', border: '0.5px solid #e5e5e5', marginTop: '3.5rem' }} className="how-it-works-grid">
             {[
               { step: '01', title: 'Create Account', desc: 'Sign up free in 30 seconds. No credit card required to get started.' },
               { step: '02', title: 'Get Your Plan', desc: 'Ram assigns you a personalized workout program and diet plan based on your goals.' },
@@ -544,7 +544,7 @@ export default function Landing() {
           <h2 style={S.sectionTitle}>SIMPLE<br />PRICING</h2>
           <p style={S.sectionSub}>No hidden fees. Cancel monthly anytime. Lifetime members never pay again.</p>
 
-          <div style={S.pricingGrid}>
+          <div style={S.pricingGrid} className="pricing-grid">
             {PLANS.map((plan) => (
               <div key={plan.id} style={plan.featured ? S.priceCardFeatured : S.priceCard}>
                 {plan.badge && <div style={S.bestTag}>{plan.badge}</div>}
@@ -587,7 +587,7 @@ export default function Landing() {
           <div style={S.sectionTag}><span style={S.sectionTagLine} />Member Stories</div>
           <h2 style={S.sectionTitle}>REAL<br />RESULTS</h2>
 
-          <div style={S.testiGrid}>
+          <div style={S.testiGrid} className="testimonials-grid">
             {TESTIMONIALS.map(({ initials, name, role, quote }) => (
               <div key={name} style={S.testiCard}>
                 <p style={S.testiQuote}>{quote}</p>
@@ -645,7 +645,7 @@ export default function Landing() {
           .hero-image-wrap > div { max-width: 340px !important; }
           .hero-image-wrap img { height: 380px !important; }
           .hero-stats { gap: 1.5rem !important; }
-          .features-grid {
+          .features-grid, .how-it-works-grid, .pricing-grid, .testimonials-grid {
             grid-template-columns: 1fr !important;
           }
           .landing-footer {
