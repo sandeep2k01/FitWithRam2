@@ -450,7 +450,7 @@ export default function Landing() {
                 Train at the gym with Ram's personalized plan. Ram assigns your workout and diet plan, then contacts you directly on WhatsApp within 24 hours.
               </p>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {['Custom workout plan', 'Personalised diet plan', 'Progress tracking in-app', 'WhatsApp support from Ram'].map(f => (
+                {['Custom workout plan', 'Personalised diet plan', 'WhatsApp support from Ram'].map(f => (
                   <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.85rem', color: '#555' }}>
                     <span style={{ color: '#111', fontWeight: 700, fontSize: '0.9rem' }}>✓</span>{f}
                   </li>
@@ -472,7 +472,7 @@ export default function Landing() {
                 Train anywhere with Ram's live guidance. Real-time form checks, live sessions, priority support and the full platform experience.
               </p>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {['Everything in Offline', 'Live sessions with Ram', 'Chat with Ram directly', 'Form check & real-time feedback', 'Advanced analytics', 'Priority support'].map(f => (
+                {['Custom workout plan', 'Personalised diet plan', 'Progress tracking in-app', 'Live sessions with Ram', 'Form check & real-time feedback', 'Priority support'].map(f => (
                   <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.85rem', color: '#555' }}>
                     <span style={{ color: '#111', fontWeight: 700, fontSize: '0.9rem' }}>✓</span>{f}
                   </li>
