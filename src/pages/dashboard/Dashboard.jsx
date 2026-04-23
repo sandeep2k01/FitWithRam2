@@ -26,8 +26,9 @@ export default function Dashboard() {
   const [volumeData, setVolumeData] = useState([])
   const [loading, setLoading] = useState(true)
   const [intentBanner, setIntentBanner] = useState(null)
-  const [trainingType, setTrainingType] = useState(null)  // 'offline' | 'online'
+  const [trainingType, setTrainingType] = useState(null)
   const [goalSaving, setGoalSaving] = useState(false)
+  const [ramPlan, setRamPlan] = useState({ diet: null, program: null })
 
   useEffect(() => {
     const intent = localStorage.getItem('training_intent')
@@ -69,6 +70,21 @@ export default function Dashboard() {
         setVolumeData(Object.entries(weeklyVolume).slice(-8).map(([week, vol]) => ({ week, volume: Math.round(vol) })))
         setStats({ totalWorkouts: workouts.length, thisWeek, streak: thisWeek, totalVolume: Math.round(workouts.reduce((acc, w) => acc + (w.total_volume || 0), 0)) })
       }
+      // Fetch Ram-assigned diet & program
+      const { data: profileData } = await supabase
+        .from('profiles').select('diet_plan').eq('id', profile.id).single()
+      const { data: inquiry } = await supabase
+        .from('inquiries')
+        .select('*, assigned_program:programs(name, fitness_goal, level, days_per_week, duration_weeks), assigned_diet:diet_plans(name)')
+        .eq('user_id', profile.id)
+        .not('assigned_program_id', 'is', null)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+      setRamPlan({
+        diet: profileData?.diet_plan || null,
+        program: inquiry?.assigned_program || null,
+      })
     } catch (err) {
       console.error(err)
     } finally {
@@ -195,6 +211,76 @@ export default function Dashboard() {
           ))
         )}
       </div>
+
+      {/* ── MY PLAN FROM RAM ── */}
+      {(ramPlan.diet || ramPlan.program) && (
+        <div style={{ marginTop: '2rem' }}>
+          <div style={{ fontSize: '0.68rem', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '0.5rem' }}>Assigned by Ram</div>
+          <div style={{ fontFamily: 'var(--ff-display)', fontSize: '1.4rem', letterSpacing: '1px', marginBottom: '1.25rem' }}>MY PLAN</div>
+          <div style={{ display: 'grid', gridTemplateColumns: ramPlan.diet && ramPlan.program ? '1fr 1fr' : '1fr', gap: '1rem' }}>
+
+            {/* Diet Plan Card */}
+            {ramPlan.diet && (ramPlan.diet.calories || ramPlan.diet.meal_plan) && (
+              <div className="card" style={{ borderLeft: '3px solid #10b981' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                  <span style={{ fontSize: '1.25rem' }}>🥗</span>
+                  <div>
+                    <div style={{ fontSize: '0.68rem', letterSpacing: '1.5px', textTransform: 'uppercase', color: '#10b981', marginBottom: '0.1rem' }}>Diet Plan</div>
+                    <div style={{ fontFamily: 'var(--ff-display)', fontSize: '1rem', letterSpacing: '1px' }}>ASSIGNED BY RAM</div>
+                  </div>
+                </div>
+                {ramPlan.diet.calories && (
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                    {[['Calories', ramPlan.diet.calories, 'kcal', '#111'],
+                      ['Protein', ramPlan.diet.protein, 'g', '#3b82f6'],
+                      ['Carbs', ramPlan.diet.carbs, 'g', '#f59e0b'],
+                      ['Fat', ramPlan.diet.fat, 'g', '#ef4444']]
+                      .map(([label, val, unit, color]) => val ? (
+                      <div key={label} style={{ background: 'var(--gray-3)', borderRadius: 8, padding: '0.6rem', textAlign: 'center' }}>
+                        <div style={{ fontSize: '1.1rem', fontWeight: 700, color, lineHeight: 1 }}>{val}</div>
+                        <div style={{ fontSize: '0.6rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{label}<br/>{unit}</div>
+                      </div>
+                    ) : null)}
+                  </div>
+                )}
+                {ramPlan.diet.meal_plan && (
+                  <div style={{ fontSize: '0.8rem', color: 'var(--muted)', lineHeight: 1.7, background: 'var(--gray-3)', borderRadius: 8, padding: '0.75rem', whiteSpace: 'pre-wrap' }}>
+                    {ramPlan.diet.meal_plan}
+                  </div>
+                )}
+                <Link to="/dashboard/diet" style={{ display: 'inline-flex', marginTop: '0.75rem', fontSize: '0.75rem', color: '#10b981', textDecoration: 'underline' }}>View full diet page →</Link>
+              </div>
+            )}
+
+            {/* Workout Program Card */}
+            {ramPlan.program && (
+              <div className="card" style={{ borderLeft: '3px solid var(--warning)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                  <span style={{ fontSize: '1.25rem' }}>🏋️</span>
+                  <div>
+                    <div style={{ fontSize: '0.68rem', letterSpacing: '1.5px', textTransform: 'uppercase', color: 'var(--warning)', marginBottom: '0.1rem' }}>Workout Program</div>
+                    <div style={{ fontFamily: 'var(--ff-display)', fontSize: '1rem', letterSpacing: '1px' }}>ASSIGNED BY RAM</div>
+                  </div>
+                </div>
+                <div style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.5rem' }}>{ramPlan.program.name}</div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                  {[['Goal', ramPlan.program.fitness_goal],
+                    ['Level', ramPlan.program.level],
+                    ['Days/Week', ramPlan.program.days_per_week],
+                    ['Duration', `${ramPlan.program.duration_weeks}w`]]
+                    .map(([label, val]) => val ? (
+                    <div key={label} style={{ background: 'var(--gray-3)', borderRadius: 8, padding: '0.6rem', textAlign: 'center' }}>
+                      <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--white)', lineHeight: 1 }}>{val}</div>
+                      <div style={{ fontSize: '0.6rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: 2 }}>{label}</div>
+                    </div>
+                  ) : null)}
+                </div>
+                <Link to="/dashboard/offline-training" style={{ display: 'inline-flex', marginTop: '0.25rem', fontSize: '0.75rem', color: 'var(--warning)', textDecoration: 'underline' }}>View full training plan →</Link>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* ── TRAINING SELECTION FLOW ── */}
       <div style={{ marginTop: '2rem' }}>
