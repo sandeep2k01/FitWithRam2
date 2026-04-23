@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { signUp } from '../../lib/supabase'
 
 export default function Signup() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [form, setForm] = useState({ fullName: '', email: '', password: '', confirm: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -18,6 +19,8 @@ export default function Signup() {
     setLoading(true)
     try {
       await signUp(form.email, form.password, form.fullName)
+      const intent = searchParams.get('intent')
+      if (intent) localStorage.setItem('training_intent', intent)
       navigate('/dashboard')
     } catch (err) {
       setError(err.message)

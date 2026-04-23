@@ -1,17 +1,25 @@
+import { useState, useEffect } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
-import { signOut } from '../../lib/supabase'
+import { signOut, supabase } from '../../lib/supabase'
 
 const ADMIN_NAV = [
-  { to: '/admin', label: 'Overview', icon: '⬛', end: true },
-  { to: '/admin/members', label: 'Members', icon: '👥' },
-  { to: '/admin/programs', label: 'Programs', icon: '📋' },
-  { to: '/admin/diet', label: 'Diet Plans', icon: '🥗' },
-  { to: '/admin/payments', label: 'Payments', icon: '💳' },
+  { to: '/admin',           label: 'Overview',   icon: '⬛', end: true },
+  { to: '/admin/members',   label: 'Members',    icon: '👥' },
+  { to: '/admin/inquiries', label: 'Inquiries',  icon: '📬', badge: true },
+  { to: '/admin/programs',  label: 'Programs',   icon: '📋' },
+  { to: '/admin/diet',      label: 'Diet Plans', icon: '🥗' },
+  { to: '/admin/payments',  label: 'Payments',   icon: '💳' },
 ]
 
 export default function AdminLayout() {
   const navigate = useNavigate()
+  const [pendingCount, setPendingCount] = useState(0)
   const handleSignOut = async () => { await signOut(); navigate('/login') }
+
+  useEffect(() => {
+    supabase.from('inquiries').select('id', { count: 'exact', head: true }).eq('status', 'pending')
+      .then(({ count }) => setPendingCount(count || 0))
+  }, [])
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
@@ -22,7 +30,7 @@ export default function AdminLayout() {
         </div>
 
         <nav style={{ flex: 1, padding: '1rem 0' }}>
-          {ADMIN_NAV.map(({ to, label, icon, end }) => (
+          {ADMIN_NAV.map(({ to, label, icon, end, badge }) => (
             <NavLink key={to} to={to} end={end} style={({ isActive }) => ({
               display: 'flex', alignItems: 'center', gap: '0.75rem',
               padding: '0.65rem 1.25rem', fontSize: '0.82rem',
@@ -31,7 +39,11 @@ export default function AdminLayout() {
               borderLeft: isActive ? '2px solid var(--warning)' : '2px solid transparent',
               transition: 'all 0.15s'
             })}>
-              <span style={{ fontSize: '14px' }}>{icon}</span>{label}
+              <span style={{ fontSize: '14px' }}>{icon}</span>
+              {label}
+              {badge && pendingCount > 0 && (
+                <span style={{ marginLeft: 'auto', background: '#ef4444', color: '#fff', fontSize: '0.62rem', fontWeight: 700, padding: '0.1rem 0.4rem', borderRadius: 999, lineHeight: 1.5 }}>{pendingCount}</span>
+              )}
             </NavLink>
           ))}
 

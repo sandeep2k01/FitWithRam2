@@ -18,6 +18,12 @@ export default function Dashboard() {
   const [recentWorkouts, setRecentWorkouts] = useState([])
   const [volumeData, setVolumeData] = useState([])
   const [loading, setLoading] = useState(true)
+  const [intentBanner, setIntentBanner] = useState(null)
+
+  useEffect(() => {
+    const intent = localStorage.getItem('training_intent')
+    if (intent) { setIntentBanner(intent); localStorage.removeItem('training_intent') }
+  }, [])
 
   useEffect(() => {
     if (!profile) return
@@ -77,6 +83,32 @@ export default function Dashboard() {
           {greeting().toUpperCase()},<br />{(profile?.full_name || 'Champ').split(' ')[0].toUpperCase()}
         </h1>
       </div>
+
+      {/* One-time intent banner */}
+      {intentBanner === 'offline' && (
+        <div style={{ background: '#fffbeb', border: '0.5px solid #fde68a', borderRadius: 8, padding: '1rem 1.25rem', marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+          <div>
+            <div style={{ fontWeight: 600, fontSize: '0.88rem', color: '#92400e', marginBottom: '0.2rem' }}>🏋️ You chose Offline Training</div>
+            <div style={{ fontSize: '0.78rem', color: '#b45309' }}>Fill your details so Ram can assign your personalized plan.</div>
+          </div>
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexShrink: 0 }}>
+            <Link to="/dashboard/offline-training" style={{ padding: '0.45rem 1rem', background: '#111', color: '#fff', borderRadius: 8, fontSize: '0.78rem', fontWeight: 600, textDecoration: 'none' }}>Fill Details →</Link>
+            <button onClick={() => setIntentBanner(null)} style={{ background: 'none', border: 'none', color: '#aaa', cursor: 'pointer', fontSize: '1.1rem', lineHeight: 1 }}>✕</button>
+          </div>
+        </div>
+      )}
+      {intentBanner === 'online' && (
+        <div style={{ background: '#f0f9ff', border: '0.5px solid #bae6fd', borderRadius: 8, padding: '1rem 1.25rem', marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+          <div>
+            <div style={{ fontWeight: 600, fontSize: '0.88rem', color: '#0c4a6e', marginBottom: '0.2rem' }}>🌐 Upgrade to Premium Online Training</div>
+            <div style={{ fontSize: '0.78rem', color: '#0369a1' }}>Unlock live sessions with Ram and full online training features.</div>
+          </div>
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexShrink: 0 }}>
+            <Link to="/dashboard/online-training" style={{ padding: '0.45rem 1rem', background: '#111', color: '#fff', borderRadius: 8, fontSize: '0.78rem', fontWeight: 600, textDecoration: 'none' }}>Upgrade →</Link>
+            <button onClick={() => setIntentBanner(null)} style={{ background: 'none', border: 'none', color: '#aaa', cursor: 'pointer', fontSize: '1.1rem', lineHeight: 1 }}>✕</button>
+          </div>
+        </div>
+      )}
 
       {/* Plan banner */}
       {!profile?.is_premium && (
