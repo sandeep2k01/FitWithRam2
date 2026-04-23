@@ -428,6 +428,67 @@ export default function Landing() {
         </div>
       </div>
 
+      {/* ── TRAINING CARDS ── */}
+      <div style={{ background: '#ffffff', borderBottom: '0.5px solid #eeeeee' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '4rem 2.5rem' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <div style={{ fontSize: '0.72rem', letterSpacing: '3px', textTransform: 'uppercase', color: '#999', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
+              <span style={{ width: '2rem', height: '0.5px', background: '#aaa' }} />Choose Your Path
+            </div>
+            <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(2rem, 4vw, 3rem)', letterSpacing: '2px', color: '#0f0f0a' }}>HOW DO YOU WANT TO TRAIN?</h2>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }} className="training-cards-grid">
+            {/* Offline Card */}
+            <div style={{ background: '#f5f5f5', border: '1px solid #e5e5e5', borderRadius: 8, padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <div>
+                <div style={{ fontSize: '0.72rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#999', marginBottom: '0.75rem' }}>🏋️ At the Gym</div>
+                <h3 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '2rem', letterSpacing: '2px', color: '#0f0f0a', marginBottom: '0.5rem' }}>OFFLINE TRAINING</h3>
+                <div style={{ fontSize: '0.82rem', color: '#555', fontWeight: 600 }}>Free — No subscription needed</div>
+              </div>
+              <p style={{ color: '#777', fontSize: '0.9rem', lineHeight: 1.7 }}>
+                Train at the gym with Ram's personalized plan. No live sessions needed — Ram assigns your workout and diet plan, then contacts you on WhatsApp.
+              </p>
+              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                {['Custom workout plan', 'Diet plan', 'Progress tracking', 'WhatsApp support from Ram'].map(f => (
+                  <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.85rem', color: '#444' }}>
+                    <span style={{ color: '#111', fontWeight: 700 }}>✓</span> {f}
+                  </li>
+                ))}
+              </ul>
+              <BtnPrimary to="/signup" onClick={() => localStorage.setItem('training_intent', 'offline')} style={{ textAlign: 'center' }}>
+                Get Started Free →
+              </BtnPrimary>
+            </div>
+
+            {/* Online Card */}
+            <div style={{ background: '#0f0f0a', border: '1px solid #222', borderRadius: 8, padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', position: 'relative' }}>
+              <div style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', background: '#fff', color: '#0f0f0a', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase', padding: '0.3rem 1rem', borderRadius: 999, whiteSpace: 'nowrap', border: '1px solid #e0e0e0' }}>
+                ⭐ Most Popular
+              </div>
+              <div>
+                <div style={{ fontSize: '0.72rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#888', marginBottom: '0.75rem' }}>🌐 Train Anywhere</div>
+                <h3 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '2rem', letterSpacing: '2px', color: '#f5f5f5', marginBottom: '0.5rem' }}>ONLINE TRAINING</h3>
+                <div style={{ fontSize: '0.82rem', color: '#aaa', fontWeight: 600 }}>Premium — Full access from ₹999/month</div>
+              </div>
+              <p style={{ color: '#888', fontSize: '0.9rem', lineHeight: 1.7 }}>
+                Train anywhere with Ram's live guidance and full platform access. Real-time form checks, live sessions, and priority support.
+              </p>
+              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                {['Everything in Offline', 'Live sessions with Ram', 'Chat with Ram directly', 'Form check & feedback', 'Advanced analytics', 'Priority support'].map(f => (
+                  <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.85rem', color: '#ccc' }}>
+                    <span style={{ color: '#f5f5f5', fontWeight: 700 }}>✓</span> {f}
+                  </li>
+                ))}
+              </ul>
+              <BtnGhost to="/signup" onClick={() => localStorage.setItem('training_intent', 'online')} style={{ textAlign: 'center', borderColor: '#444', color: '#f5f5f5' }}>
+                Start Premium →
+              </BtnGhost>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* ── FEATURES ── */}
       <div id="features" style={S.sectionFull}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0' }}>
@@ -595,6 +656,7 @@ export default function Landing() {
             gap: 1rem !important;
           }
           .footer-links { flex-wrap: wrap !important; justify-content: center !important; }
+          .training-cards-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
 
