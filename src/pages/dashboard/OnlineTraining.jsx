@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 import { initiatePayment, PLANS } from '../../lib/razorpay'
 import { GOALS } from '../../lib/goals'
@@ -26,8 +27,13 @@ const ONLINE_PLANS = [
   { id: 'lifetime', label: 'Lifetime', price: '₹14,999', note: 'one-time payment' },
 ]
 
+const GOAL_COLORS = { 'Fat Loss': { color: '#dc2626', bg: '#fee2e2', icon: '🔥' }, 'Muscle Building': { color: '#b45309', bg: '#fef3c7', icon: '💪' }, 'Strength Training': { color: '#7c3aed', bg: '#ede9fe', icon: '⚡' } }
+
 export default function OnlineTraining() {
   const { profile, setProfile } = useAuthStore()
+  const location = useLocation()
+  const preSelectedGoal = location.state?.goal || null
+  const goalMeta = preSelectedGoal ? GOAL_COLORS[preSelectedGoal] : null
   const [selected, setSelected] = useState('yearly')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -52,6 +58,16 @@ export default function OnlineTraining() {
 
   return (
     <div>
+      {/* Goal banner — shown when arrived via Dashboard training flow */}
+      {goalMeta && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem 1.25rem', background: goalMeta.bg, border: `1px solid ${goalMeta.color}33`, borderRadius: 10, marginBottom: '1.5rem' }}>
+          <span style={{ fontSize: '1.75rem' }}>{goalMeta.icon}</span>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: '0.9rem', color: goalMeta.color }}>Goal: {preSelectedGoal}</div>
+            <div style={{ fontSize: '0.78rem', color: '#555', marginTop: '0.1rem' }}>Upgrade to Online Training and Ram will build your {preSelectedGoal} program.</div>
+          </div>
+        </div>
+      )}
       {/* Page header */}
       <div style={{ marginBottom: '2rem' }}>
         <div style={{ fontSize: '0.72rem', letterSpacing: '2px', textTransform: 'uppercase', color: '#aaa', marginBottom: '0.5rem' }}>Training Type</div>

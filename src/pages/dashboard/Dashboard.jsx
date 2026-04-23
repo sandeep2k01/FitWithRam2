@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 import { supabase } from '../../lib/supabase'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
@@ -12,13 +12,22 @@ const StatCard = ({ label, value, sub, color }) => (
   </div>
 )
 
+const TRAINING_GOALS = [
+  { id: 'Fat Loss', icon: '🔥', desc: 'Burn fat and get lean', color: '#dc2626', bg: '#fee2e2' },
+  { id: 'Muscle Building', icon: '💪', desc: 'Build muscle mass and size', color: '#b45309', bg: '#fef3c7' },
+  { id: 'Strength Training', icon: '⚡', desc: 'Build raw strength and power', color: '#7c3aed', bg: '#ede9fe' },
+]
+
 export default function Dashboard() {
   const { profile } = useAuthStore()
+  const navigate = useNavigate()
   const [stats, setStats] = useState({ totalWorkouts: 0, thisWeek: 0, streak: 0, totalVolume: 0 })
   const [recentWorkouts, setRecentWorkouts] = useState([])
   const [volumeData, setVolumeData] = useState([])
   const [loading, setLoading] = useState(true)
   const [intentBanner, setIntentBanner] = useState(null)
+  const [trainingType, setTrainingType] = useState(null)  // 'offline' | 'online'
+  const [goalSaving, setGoalSaving] = useState(false)
 
   useEffect(() => {
     const intent = localStorage.getItem('training_intent')
@@ -184,6 +193,83 @@ export default function Dashboard() {
               </div>
             </div>
           ))
+        )}
+      </div>
+
+      {/* ── TRAINING SELECTION FLOW ── */}
+      <div style={{ marginTop: '2rem' }}>
+        <div style={{ fontSize: '0.68rem', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '0.5rem' }}>Start Training</div>
+        <div style={{ fontFamily: 'var(--ff-display)', fontSize: '1.4rem', letterSpacing: '1px', marginBottom: '1.5rem' }}>CHOOSE YOUR TRAINING PATH</div>
+
+        {/* STEP 1 — Training Type */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: trainingType ? '1.5rem' : 0 }}>
+          {[{ id: 'offline', label: 'Offline Training', sub: 'Train at the gym with Ram\'s guidance', icon: '🏋️' },
+            { id: 'online', label: 'Online Training', sub: 'Train anywhere with full premium features', icon: '🌐' }]
+            .map(({ id, label, sub, icon }) => (
+            <button key={id} onClick={() => setTrainingType(trainingType === id ? null : id)}
+              style={{
+                padding: '1.5rem', border: `2px solid ${trainingType === id ? '#111' : 'var(--border)'}`,
+                borderRadius: 12, background: trainingType === id ? '#111' : 'var(--gray-2)',
+                color: trainingType === id ? '#fff' : 'var(--white)', cursor: 'pointer',
+                textAlign: 'left', fontFamily: 'inherit', transition: 'all 0.2s',
+              }}>
+              <div style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>{icon}</div>
+              <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: '0.25rem' }}>{label}</div>
+              <div style={{ fontSize: '0.78rem', color: trainingType === id ? 'rgba(255,255,255,0.65)' : 'var(--muted)', lineHeight: 1.5 }}>{sub}</div>
+              {trainingType === id && <div style={{ marginTop: '0.75rem', fontSize: '0.7rem', letterSpacing: '1px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)' }}>↓ Choose your goal below</div>}
+            </button>
+          ))}
+        </div>
+
+        {/* STEP 2 — Goal Cards (revealed after picking type) */}
+        {trainingType && (
+          <div>
+            <div style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '1rem' }}>Now select your goal:</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+              {TRAINING_GOALS.map(({ id, icon, desc, color, bg }) => (
+                <button key={id} disabled={goalSaving}
+                  onClick={async () => {
+                    setGoalSaving(true)
+                    // Save inquiry to Supabase so Ram sees it in admin panel
+                    try {
+                      await supabase.from('inquiries').insert({
+                        user_id: profile?.id,
+                        training_type: trainingType,
+                        fitness_goal: id,
+                        full_name: profile?.full_name || '',
+                        email: profile?.email || '',
+                        phone: profile?.phone || '',
+                        message: `Selected via dashboard training flow: ${trainingType} / ${id}`,
+                      })
+                    } catch (_) { /* non-blocking */ }
+                    setGoalSaving(false)
+                    // STEP 3 — Navigate
+                    if (trainingType === 'offline') {
+                      navigate('/dashboard/offline-training', { state: { goal: id } })
+                    } else {
+                      if (profile?.is_premium) {
+                        navigate('/dashboard/workouts', { state: { goal: id } })
+                      } else {
+                        navigate('/dashboard/online-training', { state: { goal: id } })
+                      }
+                    }
+                  }}
+                  style={{
+                    padding: '1.5rem 1rem', border: '2px solid var(--border)',
+                    borderRadius: 12, background: 'var(--gray-2)', cursor: 'pointer',
+                    textAlign: 'center', fontFamily: 'inherit', transition: 'all 0.2s',
+                    opacity: goalSaving ? 0.6 : 1,
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = color; e.currentTarget.style.background = bg; e.currentTarget.style.color = color }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--gray-2)'; e.currentTarget.style.color = 'var(--white)' }}
+                >
+                  <div style={{ fontSize: '2rem', marginBottom: '0.6rem' }}>{icon}</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.9rem', marginBottom: '0.3rem' }}>{id}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--muted)', lineHeight: 1.5 }}>{desc}</div>
+                </button>
+              ))}
+            </div>
+          </div>
         )}
       </div>
     </div>

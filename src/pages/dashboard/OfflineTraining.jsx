@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { useAuthStore } from '../../store/authStore'
 import { GOAL_IDS, getGoal } from '../../lib/goals'
@@ -15,13 +16,14 @@ function StatusBadge({ status }) {
 
 export default function OfflineTraining() {
   const { profile } = useAuthStore()
+  const location = useLocation()
   const [inquiry, setInquiry] = useState(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [form, setForm] = useState({
     full_name: '', phone: '', email: '',
-    fitness_goal: 'Muscle Building',
+    fitness_goal: location.state?.goal || 'Muscle Building',
     preferred_time: 'Morning (6am-12pm)',
     location: '', message: '',
   })
